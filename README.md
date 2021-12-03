@@ -1,4 +1,6 @@
-# Gitlab CI/CD Stack [ReactTS, ExpressTS, PostgreSQL, Nginx]
+# Gitlab CI/CD Stack
+
+# [ReactTS, ExpressTS, PostgreSQL, Nginx]
 
 ### Prerequisites
 
@@ -12,9 +14,13 @@
 - .env
     - Check the .env file and descriptions
     - If you add a variable for react, also add it inside react Dockerfile and docker-compose build context.
-- set-gitlab-variables.
+- set-gitlab-variables.sh
 
-If you don't need postgresql or nginx, just removing them from docker-compose.yml is enough. You might want to expose ports for your app if you are removing nginx.
+  This script automatically sets Gitlab CI/CD variables inside .env file. This is done on "build" step of gitlab-ci
+    - Add your deployment variables here. For example change HOST_URL to `https://example.com` to deploy your app there
+
+If you don't need postgresql or nginx, just removing them from docker-compose.yml is enough. You might want to expose
+ports for your app if you are removing nginx.
 
 ## Adding new project to stack
 
