@@ -1,0 +1,44 @@
+version: "3.9"
+services:
+  nginx:
+    container_name: projectname-nginx
+    restart: always
+    image: nginx:1.21-alpine
+    ports:
+      - "${NGINX_PORT}:80"
+    volumes:
+      - ./nginx/:/etc/nginx/conf.d
+  api:
+    container_name: projectname-api
+    build:
+      context: "./api"
+    restart: always
+    image: projectname-api
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+  app:
+    container_name: projectname-app
+    build:
+      context: "./app"
+      args:
+        REACT_APP_HOST_URL: "${HOST_URL}"
+        PUBLIC_URL: "${PUBLIC_URL}"
+        REACT_APP_API_URL: "${REACT_APP_API_URL}"
+    #network_mode: host
+    restart: always
+    image: projectname-app
+    env_file:
+      - .env
+  postgres:
+    container_name: projectname-db
+    image: postgres:14-alpine
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - /volumes/projectname/db-data:/var/lib/postgresql/data
+networks:
+  default:
+    name: projectname-network
