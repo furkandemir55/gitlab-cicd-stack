@@ -1,6 +1,5 @@
 type Endpoint = "home"
 type ApiParams = { endpoint: Endpoint }
-
 type Api = (params: ApiParams) => Promise<Response>
 
 const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000'
