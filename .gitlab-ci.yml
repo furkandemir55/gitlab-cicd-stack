@@ -30,29 +30,11 @@ build:
     paths:
       - .env
   variables:
-    PROJECT_PATH: "/arge/${CI_PROJECT_ID}_${CI_PROJECT_NAME}"
+    PROJECT_PATH: "/arge/${CI_PROJECT_NAME}_${CI_PROJECT_ID}"
   script:
-    - mkdir -p ${PROJECT_PATH}/{temp,live} && rm -rf ${PROJECT_PATH}/old 2>/dev/null
-    - rsync -av --progress . ${PROJECT_PATH}/temp --exclude .git
-    - cd ${PROJECT_PATH}/temp && docker-compose build
-    - cd ${PROJECT_PATH}/live 2>/dev/null && cat docker-compose.yml 2>/dev/null && docker-compose down --remove-orphans  # if live project existed, stop containers
-    - mv ${PROJECT_PATH}/live ${PROJECT_PATH}/old
-    - mv ${PROJECT_PATH}/temp ${PROJECT_PATH}/live
-  only:
-    - master
-  tags:
-    - arge-server
-deploy:
-  stage: deploy
-  needs: [ build ]
-  cache: #to reset cache to default
-    policy: push
-    paths:
-      - .env
-  variables:
-    PROJECT_PATH: "/arge/${CI_PROJECT_ID}_${CI_PROJECT_NAME}"
-  script:
-    - cd ${PROJECT_PATH}/live && docker-compose up -d
+    - mkdir -p ${PROJECT_PATH} && rm -rf ${PROJECT_PATH}/.* 2>/dev/null
+    - rsync -av --progress . ${PROJECT_PATH} --exclude .git
+    - cd ${PROJECT_PATH} && docker-compose up -d --build --remove-orphans
   only:
     - master
   tags:
