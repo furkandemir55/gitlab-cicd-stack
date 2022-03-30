@@ -1,5 +1,24 @@
 #!/bin/bash
 
+cd "$(dirname "$0")" || exit
+
+cp example-docker-compose.yml docker-compose.yml
+
+#### ask if app is used
+printf "USE APP?(y/n): "
+read USE_APP
+if [ "$USE_APP" != "y" ] && [ "$USE_APP" != "Y" ]; then
+#  rm -rf ./app
+  sed -Ezi 's/app:.*(postgres:\n)/\1/' docker-compose.yml
+fi
+
+#### ask if db is used
+printf "USE DB?(y/n): "
+read USE_DB
+if [ "$USE_DB" != "y" ] && [ "$USE_DB" != "Y" ]; then
+  sed -Ezi 's/postgres:.*(networks:)/\n\1/' docker-compose.yml
+fi
+
 printf "PROJECT NAME(dont-use-space): "
 read PROJECT_NAME
 printf "PROJECT FOLDER PATH(default=/arge): "
@@ -11,7 +30,7 @@ read BRANCH_NAME
 printf "RUNNER TAG(default=arge-server): "
 read RUNNER_TAG
 
-cp env.example .env
+cp example.env .env
 
 if [ -z "$PROJECT_PATH" ]; then
   PROJECT_PATH=/arge
@@ -36,4 +55,3 @@ sed -i "s;VOLUME_PATH=.*;VOLUME_PATH=$VOLUME_PATH;" .env
 sed -i "s;BRANCH_NAME=.*;BRANCH_NAME=$BRANCH_NAME;" .env
 sed -i "s;RUNNER_TAG=.*;RUNNER_TAG=$RUNNER_TAG;" .env
 sed -i "s;PROJECT_NAME=.*;PROJECT_NAME=$PROJECT_NAME;" .env
-
