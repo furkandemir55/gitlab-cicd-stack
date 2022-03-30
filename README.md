@@ -4,6 +4,8 @@
 
 ### Prerequisites
 
+execute setup-project.sh and follow the steps or
+
 - gitlab-ci.yml
     - Change "arge" folder to some other folder that runner has full access to
     - Change "volumes" folder to wherever you want volume data
