@@ -18,7 +18,7 @@ set_variables:
     - chmod +x set-gitlab-variables.sh
     - ./set-gitlab-variables.sh
   only:
-    - master
+    - "${BRANCH_NAME}"
   tags:
     - arge-server
 
@@ -30,12 +30,12 @@ build:
     paths:
       - .env
   variables:
-    PROJECT_PATH: "/arge/${CI_PROJECT_NAME}_${CI_PROJECT_ID}"
+    PROJECT_FOLDER: "${PROJECT_PATH}/${CI_PROJECT_NAME}_${CI_PROJECT_ID}"
   script:
-    - mkdir -p ${PROJECT_PATH} && rm -rf ${PROJECT_PATH}/.* 2>/dev/null
-    - rsync -av --progress . ${PROJECT_PATH} --exclude .git
-    - cd ${PROJECT_PATH} && docker-compose up -d --build --remove-orphans
+    - mkdir -p ${PROJECT_FOLDER} && rm -rf ${PROJECT_FOLDER}/.* 2>/dev/null
+    - rsync -av --progress . ${PROJECT_FOLDER} --exclude .git
+    - cd ${PROJECT_FOLDER} && docker-compose up -d --build --remove-orphans
   only:
-    - master
+    - "${BRANCH_NAME}"
   tags:
     - arge-server
