@@ -1,4 +1,4 @@
-FROM node:14-alpine
+FROM node:16-alpine AS builder
 
 WORKDIR /app
 
@@ -8,4 +8,15 @@ COPY . ./
 
 RUN npm run build
 
-CMD ["npm", "run", "start:dist"]
+FROM node:16-alpine
+
+WORKDIR /app
+
+ENV NODE_ENV production
+
+COPY package*.json ./
+RUN npm ci
+
+COPY --from=builder /app/dist .
+
+CMD ["node", "index.js"]
