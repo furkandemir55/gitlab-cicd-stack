@@ -1,8 +1,15 @@
-import React from 'react'
-import apiRequest from "../../utils/api";
+import React, {useEffect} from 'react'
+import useApi from "../../hooks/useApi";
 
 const Homepage: React.FunctionComponent = () => {
-    apiRequest({endpoint: "home"}).then(r => r.json()).then(r=>console.log(r))
+    const [apiState, {fetch}] = useApi("example1")
+    useEffect(() => {
+        fetch()
+    }, [])
+    useEffect(() => {
+        console.log(apiState.error)
+        console.log(apiState.response)
+    }, [apiState.response, apiState.error])
     return <div>hi</div>
 }
 
