@@ -8,7 +8,7 @@ cp example-docker-compose.yml docker-compose.yml
 printf "USE APP?(y/n): "
 read USE_APP
 if [ "$USE_APP" != "y" ] && [ "$USE_APP" != "Y" ]; then
-#  rm -rf ./app
+  rm -rf ./app
   sed -Ezi 's/app:.*(postgres:\n)/\1/' docker-compose.yml
 fi
 
