@@ -18,24 +18,24 @@ set_variables:
     - chmod +x set-gitlab-variables.sh
     - ./set-gitlab-variables.sh
   only:
-    - "${BRANCH_NAME}"
+    - main
   tags:
     - arge-server
 
 build:
   stage: build
-  needs: [ set_variables ]
+  needs: [set_variables]
   cache:
     policy: pull
     paths:
       - .env
   variables:
-    PROJECT_FOLDER: "${PROJECT_PATH}/${CI_PROJECT_NAME}_${CI_PROJECT_ID}"
+    PROJECT_FOLDER: "${CI_PROJECT_NAME}_${CI_PROJECT_ID}"
   script:
-    - mkdir -p ${PROJECT_FOLDER} && rm -rf ${PROJECT_FOLDER}/.* 2>/dev/null
-    - rsync -av --progress . ${PROJECT_FOLDER} --exclude .git
-    - cd ${PROJECT_FOLDER} && docker-compose up -d --build --remove-orphans
+    - rm -rf /arge/${PROJECT_FOLDER}/.* 2> /dev/null && mkdir -p /arge/${PROJECT_FOLDER}
+    - rsync -av --progress . /arge/${PROJECT_FOLDER} --exclude .git
+    - cd /arge/${PROJECT_FOLDER} && chmod +x *.sh && ./run-docker.sh
   only:
-    - "${BRANCH_NAME}"
+    - main
   tags:
     - arge-server

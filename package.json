@@ -1,0 +1,22 @@
+{
+	"name": "gitlab-cicd-stack",
+	"version": "1.0.0",
+	"description": "# [ReactTS, ExpressTS, PostgreSQL, Nginx]",
+	"main": "index.js",
+	"scripts": {
+		"prettier": "npx prettier --write ."
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/furkandemir55/gitlab-cicd-stack.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/furkandemir55/gitlab-cicd-stack/issues"
+	},
+	"homepage": "https://github.com/furkandemir55/gitlab-cicd-stack#readme",
+	"dependencies": {
+		"prettier": "^2.6.2"
+	}
+}

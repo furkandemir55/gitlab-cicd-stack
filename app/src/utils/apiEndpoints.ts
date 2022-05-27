@@ -1,16 +1,40 @@
-type ExampleEndpoint = "example1"
-type ExampleRequestBody = undefined
-type ExampleResponse = { response: string }
+type Login = {
+	endpoint: "auth/login"
+	requestName: "auth/login"
+	requestBody: { username: string; password: string }
+	responseSuccess: { accessToken: string }
+	responseError: { error?: string; code?: string }
+}
 
-type ExampleEndpoint2 = "example2"
-type ExampleRequest2Body = { test: string }
-type ExampleResponse2 = { completed: boolean }
+type Register = {
+	endpoint: "auth/register"
+	requestName: "auth/register"
+	requestBody: { username: string; password: string }
+	responseSuccess: undefined
+	responseError: { error?: string; code?: string }
+}
 
-type ExampleEndpoint3 = "example3"
-type ExampleRequest3Body = { hello: boolean }
-type ExampleResponse3 = { error: boolean }
+type CheckToken = {
+	endpoint: "auth/checkToken"
+	requestName: "auth/checkToken"
+	requestBody: undefined
+	responseSuccess: { success: boolean }
+	responseError: { error?: string; code?: string }
+}
 
-//TODO find better way to extend these types
-export type ApiEndpoint = ExampleEndpoint | ExampleEndpoint2 | ExampleEndpoint3
-export type ApiRequestBody<T> = T extends ExampleEndpoint ? ExampleRequestBody : T extends ExampleEndpoint2 ? ExampleRequest2Body : ExampleRequest3Body
-export type ApiResponse<T> = T extends ExampleEndpoint ? ExampleResponse : T extends ExampleEndpoint2 ? ExampleResponse2 : ExampleResponse3
+type PostEndpoint = Login | Register
+type GetEndpoint = CheckToken
+export type ApiEndpointNames =
+	| PostEndpoint["requestName"]
+	| GetEndpoint["requestName"]
+
+export type ApiRequest<R extends ApiEndpointNames> =
+	R extends Login["requestName"]
+		? Login
+		: R extends Register["requestName"]
+		? Register
+		: R extends CheckToken["requestName"]
+		? CheckToken
+		: never
+
+export type ApiEndpoint<T extends ApiEndpointNames> = ApiRequest<T>
